@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { CharacterPage } from './pages/CharacterPage.tsx';
 import { LeaderboardPage } from './pages/LeaderboardPage.tsx';
+import { ROUTER_FUTURE } from './lib/router.ts';
 
 // HashRouter gör att länkar som /#/character/eu/sylvanas/Rooiben
 // fungerar även på GitHub Pages, som saknar stöd för server-routing.
 export default function App() {
   return (
-    <HashRouter>
+    <HashRouter future={ROUTER_FUTURE}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LeaderboardPage />} />

@@ -1,5 +1,7 @@
 # Mythic+ Topplista
 
+[![CI](https://github.com/Niklaskarlsson-1/mplus-leaderboard/actions/workflows/ci.yml/badge.svg)](https://github.com/Niklaskarlsson-1/mplus-leaderboard/actions/workflows/ci.yml)
+
 En topplista för World of Warcraft Mythic+ byggd med React, TypeScript och Vite.
 Data hämtas live från Raider.IO:s öppna API.
 
@@ -45,6 +47,8 @@ Testerna täcker tre nivåer:
 - **Logik** (`src/lib/*.test.ts`): tidsformat, klassfärger, räkning av populära specs och API-lagret, med cache, felhantering och tydligt fel när en karaktär inte finns.
 - **Komponenter** (`src/components/*.test.tsx`): filter, topplistans tabell med "Visa fler" och spec-diagrammet med rollbyte och tooltip.
 - **Sidor** (`src/pages/*.test.tsx`): hela topplistan och karaktärssidan med mockat API, inklusive filter i URL:en, laddning och felmeddelanden.
+
+Typkontroll, tester och bygge körs automatiskt med GitHub Actions vid varje pull request och push till `main` (`.github/workflows/ci.yml`).
 
 Inga riktiga anrop görs mot Raider.IO i testerna; `fetch` ersätts med testdata från `src/test/fixtures.ts`.
 

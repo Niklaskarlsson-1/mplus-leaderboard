@@ -1,0 +1,46 @@
+# Kör typkontroll, tester och bygge automatiskt.
+# Resultatet syns som en grön bock eller ett rött kryss på commits och pull requests.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request: # alla pull requests, oavsett gren
+  workflow_dispatch: # gör att man kan köra den manuellt under fliken Actions
+
+# En ny push till samma gren avbryter den tidigare körningen, så att man
+# inte väntar på resultat för kod som redan är ersatt.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Typkoll, tester och bygge
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Hämta koden
+        uses: actions/checkout@v4
+
+      - name: Installera Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installera paket
+        run: npm ci
+
+      - name: Typkontroll
+        run: npm run typecheck
+
+      - name: Tester
+        run: npm test
+
+      - name: Bygge
+        run: npx vite build

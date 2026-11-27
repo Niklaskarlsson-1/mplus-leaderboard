@@ -16,6 +16,11 @@ export const PAGES = 5;
 // efter att filtret har ändrats.
 const cache = new Map<string, Promise<unknown>>();
 
+/** Tömmer cachen. Används av testerna. */
+export function clearCache(): void {
+  cache.clear();
+}
+
 async function getJson<T>(url: string): Promise<T> {
   const cached = cache.get(url);
   if (cached) return cached as Promise<T>;

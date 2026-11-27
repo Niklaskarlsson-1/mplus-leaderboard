@@ -22,6 +22,7 @@ Data hämtas live från Raider.IO:s öppna API.
 - **Vite** för utveckling och bygge
 - Egen `useAsync`-hook för laddning, fel och data
 - Enkel cache i minnet så att filterbyten går snabbt
+- **Vitest + React Testing Library** med 53 tester
 
 ## Kom igång
 
@@ -31,6 +32,21 @@ npm run dev
 ```
 
 Öppna sedan http://localhost:5173.
+
+## Tester
+
+```bash
+npm test            # kör alla tester en gång
+npm run test:watch  # kör om testerna när du sparar
+```
+
+Testerna täcker tre nivåer:
+
+- **Logik** (`src/lib/*.test.ts`): tidsformat, klassfärger, räkning av populära specs och API-lagret, med cache, felhantering och tydligt fel när en karaktär inte finns.
+- **Komponenter** (`src/components/*.test.tsx`): filter, topplistans tabell med "Visa fler" och spec-diagrammet med rollbyte och tooltip.
+- **Sidor** (`src/pages/*.test.tsx`): hela topplistan och karaktärssidan med mockat API, inklusive filter i URL:en, laddning och felmeddelanden.
+
+Inga riktiga anrop görs mot Raider.IO i testerna; `fetch` ersätts med testdata från `src/test/fixtures.ts`.
 
 ---
 

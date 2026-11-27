@@ -1,42 +1,10 @@
 import { useMemo, useState } from 'react';
+import { countSpecs } from '../lib/stats.ts';
 import type { Ranking, Role } from '../lib/types.ts';
 import { classColor, ROLE_LABELS, ROLE_ORDER } from '../lib/wow.ts';
 import { RoleIcon } from './RoleIcon.tsx';
 
-interface SpecStat {
-  key: string;
-  spec: string;
-  className: string;
-  classSlug: string;
-  runs: number; // antal runs där specen finns med
-}
-
 const MAX_ROWS = 10;
-
-/** Räknar i hur många runs varje spec finns med, per roll. */
-function countSpecs(rankings: Ranking[], role: Role): SpecStat[] {
-  const stats = new Map<string, SpecStat>();
-  for (const { run } of rankings) {
-    const seen = new Set<string>();
-    for (const m of run.roster) {
-      if (m.role !== role) continue;
-      const c = m.character;
-      const key = `${c.class.slug}:${c.spec.slug}`;
-      if (seen.has(key)) continue; // två av samma spec i en grupp räknas en gång
-      seen.add(key);
-      const s = stats.get(key) ?? {
-        key,
-        spec: c.spec.name,
-        className: c.class.name,
-        classSlug: c.class.slug,
-        runs: 0,
-      };
-      s.runs++;
-      stats.set(key, s);
-    }
-  }
-  return [...stats.values()].sort((a, b) => b.runs - a.runs || a.spec.localeCompare(b.spec));
-}
 
 export function SpecChart({ rankings }: { rankings: Ranking[] }) {
   const [role, setRole] = useState<Role>('dps');

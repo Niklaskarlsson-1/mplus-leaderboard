@@ -48,3 +48,36 @@ export function formatDuration(ms: number): string {
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' });
 }
+
+/** "Death Knight" -> "death-knight", för att slå upp klassfärgen. */
+export function classSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+
+/** Färger för föremålskvalitet, som i spelet. */
+export const QUALITY_COLORS: Record<number, string> = {
+  0: '#9d9d9d', // poor
+  1: '#ffffff', // common
+  2: '#1eff00', // uncommon
+  3: '#0070dd', // rare
+  4: '#a335ee', // epic
+  5: '#ff8000', // legendary
+  6: '#e6cc80', // artifact
+  7: '#00ccff', // heirloom
+};
+
+export function qualityColor(quality: number): string {
+  return QUALITY_COLORS[quality] ?? '#ffffff';
+}
+
+/** "the-venomous-abyss" -> "The Venomous Abyss" */
+export function titleFromSlug(slug: string): string {
+  return slug
+    .split('-')
+    .map((w, i) => (i > 0 && ['of', 'the', 'and'].includes(w) ? w : w[0].toUpperCase() + w.slice(1)))
+    .join(' ');
+}
+
+export function formatNumber(n: number): string {
+  return n.toLocaleString('sv-SE');
+}

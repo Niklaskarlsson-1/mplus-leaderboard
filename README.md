@@ -9,11 +9,16 @@ Data hämtas live från Raider.IO:s öppna API.
 - Nyckelnivå, tid mot tidsgräns, poäng och hela gruppen med klassfärger och roller
 - Diagram över de populäraste specsen per roll (tank, healer, DPS)
 - Sammanfattning: högsta nyckel, bästa poäng och vanligaste dungeon
-- Länkar till varje spelares Raider.IO-profil
+- **Karaktärssidor**: klicka på en spelare för att se
+  - helkroppsbild, guild, item level, Mythic+-poäng per roll och rankning
+  - all utrustning med enchants och gems, med Wowhead-tooltips som visar exakta stats
+  - bästa run per dungeon, senaste runs och raid-progress
+  - knapp för att kopiera talangsträngen och importera den i spelet
 
 ## Teknik
 
 - **React 18 + TypeScript** (strikt läge) med typade API-svar
+- **React Router** (HashRouter) med filtren sparade i URL:en, så att länkar kan delas
 - **Vite** för utveckling och bygge
 - Egen `useAsync`-hook för laddning, fel och data
 - Enkel cache i minnet så att filterbyten går snabbt
@@ -29,5 +34,5 @@ npm run dev
 
 ---
 
-Data från [Raider.IO](https://raider.io). Fanprojekt, inte anslutet till Blizzard Entertainment.
+Data från [Raider.IO](https://raider.io), föremåls-tooltips från [Wowhead](https://www.wowhead.com). Fanprojekt, inte anslutet till Blizzard Entertainment.
 World of Warcraft är ett varumärke som tillhör Blizzard Entertainment.

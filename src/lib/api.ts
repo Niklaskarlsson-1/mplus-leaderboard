@@ -1,4 +1,4 @@
-import type { Ranking, Region, RunsResponse, StaticData } from './types.ts';
+import type { CharacterProfile, Ranking, Region, RunsResponse, StaticData } from './types.ts';
 
 const BASE = 'https://raider.io/api/v1';
 const CDN = 'https://cdn.raiderio.net';
@@ -61,6 +61,49 @@ export function cdnUrl(path: string): string {
   return path.startsWith('http') ? path : `${CDN}${path}`;
 }
 
-export function profileUrl(path: string): string {
-  return `https://raider.io${path}`;
+/** Länk inom appen till en karaktärssida. */
+export function characterPath(region: string, realm: string, name: string): string {
+  return `/character/${region}/${realm}/${encodeURIComponent(name)}`;
+}
+
+/** Raider.IO:s ikonbilder, t.ex. "inv_sword_1h_ulatek_d_01". */
+export function iconUrl(icon: string): string {
+  return `${CDN}/images/wow/icons/large/${icon}.jpg`;
+}
+
+const PROFILE_FIELDS = [
+  'gear',
+  'guild',
+  'talents',
+  'raid_progression',
+  'mythic_plus_scores_by_season:current',
+  'mythic_plus_ranks',
+  'mythic_plus_best_runs',
+  'mythic_plus_recent_runs',
+].join(',');
+
+export async function fetchCharacter(
+  region: string,
+  realm: string,
+  name: string
+): Promise<CharacterProfile> {
+  const params = new URLSearchParams({ region, realm, name, fields: PROFILE_FIELDS });
+  try {
+    return await getJson<CharacterProfile>(`${BASE}/characters/profile?${params}`);
+  } catch (err) {
+    // Raider.IO svarar 400 när karaktären inte finns.
+    if (err instanceof Error && err.message.includes('400')) {
+      throw new Error(`Hittade ingen karaktär som heter ${name} på ${realm} (${region.toUpperCase()}).`);
+    }
+    throw err;
+  }
+}
+
+/**
+ * Blizzard har tre bilder per karaktär: avatar, inset och main-raw
+ * (helkropp utan bakgrund). Raider.IO ger oss avatar-länken.
+ */
+export function renderUrl(thumbnail: string): string | null {
+  const base = thumbnail.split('?')[0];
+  return base.endsWith('-avatar.jpg') ? base.replace('-avatar.jpg', '-main-raw.png') : null;
 }

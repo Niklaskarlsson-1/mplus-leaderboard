@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { cdnUrl, PAGE_SIZE, profileUrl } from '../lib/api.ts';
+import { Link } from 'react-router-dom';
+import { cdnUrl, characterPath, PAGE_SIZE } from '../lib/api.ts';
 import type { Ranking, RosterMember } from '../lib/types.ts';
 import { classColor, formatDate, formatDuration, ROLE_ORDER } from '../lib/wow.ts';
 import { RoleIcon } from './RoleIcon.tsx';
@@ -11,16 +12,14 @@ function sortRoster(roster: RosterMember[]): RosterMember[] {
 function Member({ m }: { m: RosterMember }) {
   const c = m.character;
   return (
-    <a
+    <Link
       className="member"
-      href={profileUrl(c.path)}
-      target="_blank"
-      rel="noreferrer"
+      to={characterPath(c.region.slug, c.realm.slug, c.name)}
       title={`${c.name} – ${c.spec.name} ${c.class.name} (${c.realm.name}-${c.region.short_name})`}
     >
       <RoleIcon role={m.role} />
       <span className="member-name" style={{ color: classColor(c.class.slug) }}>{c.name}</span>
-    </a>
+    </Link>
   );
 }
 
